@@ -1,0 +1,84 @@
+<mat-sidenav-container class="container">
+  <mat-sidenav mode="side" opened>
+    <mat-card>
+      <mat-tab-group>
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon matListIcon>forum</mat-icon>
+          </ng-template>
+          <mat-list class="conversations">
+            <mat-list-item *ngFor="let conversation of conversations | keys" (click)="selectConversation(conversation.value.id)">
+              <mat-icon matListIcon>forum</mat-icon>
+              <p>{{conversation.value.display_name}}</p>
+            </mat-list-item>
+            <mat-list-item class="create-conversation">
+              <button mat-mini-fab (click)="createConversation()">
+                <mat-icon aria-label="Create Conversation">add</mat-icon>
+              </button>
+            </mat-list-item>
+          </mat-list>
+        </mat-tab>
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon matListIcon>account_circle</mat-icon>
+          </ng-template>
+          <mat-list>
+            <mat-list-item *ngFor="let user of users">
+              <mat-icon matListIcon>account_circle</mat-icon>
+              <p>{{user.name}}</p>
+            </mat-list-item>
+          </mat-list>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card>
+  </mat-sidenav>
+  <mat-sidenav position="end" mode="side" opened *ngIf="selectedConversation">
+    <mat-card>
+      <mat-list>
+        <mat-list-item *ngFor="let member of selectedConversation.members | keys">
+          <img matListAvatar src="https://randomuser.me/api/portraits/thumb/{{nameToImage(member.value.id).prefix}}men/{{nameToImage(member.value.id).index}}.jpg"
+          />
+          <p>{{member.value.user.name}}</p>
+        </mat-list-item>
+      </mat-list>
+    </mat-card>
+  </mat-sidenav>
+  <section class="empty-conversation" *ngIf="!selectedConversation">
+    <h1 class="mat-display-1">Select a conversation from the left to start chatting</h1>
+  </section>
+  <section *ngIf="selectedConversation">
+    <div class="mat-typography conversation-header">
+      <h2>
+        <mat-icon>forum</mat-icon>
+        {{selectedConversation.display_name}}</h2>
+      <p>
+        <mat-icon>account_circle</mat-icon>
+        {{(selectedConversation.members | keys).length}} Members</p>
+    </div>
+
+    <mat-divider></mat-divider>
+    <mat-list dense class="conversation-history mat-typography">
+      <mat-list-item *ngFor="let event of selectedConversation.events.values()" [dir]="event.from === selectedConversation.me.id ? 'rtl' : 'ltr'">
+        <img *ngIf="event.type == 'text'" matListAvatar matTooltip="{{selectedConversation.members[event.from].user.name}}" src="https://randomuser.me/api/portraits/thumb/{{nameToImage(event.from).prefix}}men/{{nameToImage(event.from).index}}.jpg"
+        />
+        <p *ngIf="event.type == 'text'" [dir]="'ltr'">{{event.body.text}}</p>
+        <p *ngIf="event.type == 'member:invited'" class="text-center">
+          <b>{{selectedConversation.members[event.from].user.name}}</b> has been invited to the conversation</p>
+        <p *ngIf="event.type == 'member:joined'" class="text-center">
+          <b>{{selectedConversation.members[event.from].user.name}}</b> has joined the conversation</p>
+        <p *ngIf="event.type == 'member:left'" class="text-center">
+          <b>{{selectedConversation.members[event.from].user.name}}</b> has left the conversation</p>
+        <p *ngIf="event.type == 'member:media'" class="text-center">
+          <b>{{selectedConversation.members[event.from].user.name}}</b> has {{event.body.audio ? 'enabled': 'disabled'}} audio</p>
+      </mat-list-item>
+    </mat-list>
+
+    <div class="conversation-input">
+      <mat-divider></mat-divider>
+      <mat-form-field class="full-width">
+        <input matInput placeholder="Start chatting..." name="text" [(ngModel)]="text">
+        <mat-icon matSuffix (click)="sendText(text)">send</mat-icon>
+      </mat-form-field>
+    </div>
+  </section>
+</mat-sidenav-container>

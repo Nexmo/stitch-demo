@@ -1,0 +1,27 @@
+.login-tabs .full-width {
+    width: 100%;
+}
+
+.login-tabs button {
+    float: right;
+}
+
+.login-tabs form {
+    padding: 20px 0;
+}
+
+.mat-list-icon {
+    color: rgba(0, 0, 0, 0.54);
+}
+
+.mat-spinner {
+    width: 20px !important;
+    height: 20px !important;
+    display: inline-block;
+    margin-left: 10px;
+}
+
+/deep/ .mat-spinner svg{
+    width: 20px !important;
+    height: 20px !important;
+}
