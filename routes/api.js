@@ -4,7 +4,7 @@ var router = express.Router();
 var Nexmo = require('nexmo');
 var config = require('../config');
 
-var nexmo = new Nexmo({apiKey: config.API_KEY, apiSecret: config.API_SECRET, applicationId: config.APP_ID, privateKey: config.PRIVATE_KEY});
+var nexmo = new Nexmo({ apiKey: config.API_KEY, apiSecret: config.API_SECRET, applicationId: config.APP_ID, privateKey: config.PRIVATE_KEY });
 
 const adminAcl = {
   "paths": {
@@ -28,7 +28,7 @@ const nonAdminAcl = {
   }
 }
 
-router.post('/users', function(req, res, next) {
+router.post('/users', function (req, res, next) {
   var username = req.body.username
   var admin = req.body.admin
 
@@ -53,7 +53,7 @@ router.post('/users', function(req, res, next) {
   })
 });
 
-router.post('/conversations', function(req, res, next) {
+router.post('/conversations', function (req, res, next) {
   var displayName = req.body.displayName
 
   nexmo.conversations.create({
@@ -67,7 +67,7 @@ router.post('/conversations', function(req, res, next) {
   })
 });
 
-router.put('/conversations', function(req, res, next) {
+router.put('/conversations', function (req, res, next) {
   var conversationId = req.body.conversationId
   var userId = req.body.userId
   var action = req.body.action
@@ -87,7 +87,7 @@ router.put('/conversations', function(req, res, next) {
   })
 })
 
-router.get('/users', function(req, res) {
+router.get('/users', function (req, res) {
   nexmo.users.get({}, (error, response) => {
     if (error) {
       res.json(error)
@@ -97,7 +97,7 @@ router.get('/users', function(req, res) {
   });
 });
 
-router.get('/conversations', function(req, res) {
+router.get('/conversations', function (req, res) {
   nexmo.conversations.get({}, (error, response) => {
     if (error) {
       res.json(error)
@@ -107,7 +107,7 @@ router.get('/conversations', function(req, res) {
   });
 });
 
-router.get('/jwt/:user', function(req, res, next) {
+router.get('/jwt/:user', function (req, res, next) {
   var admin = req.query.admin
   nexmo.users.get({}, (error, response) => {
     if (error) {
@@ -115,7 +115,7 @@ router.get('/jwt/:user', function(req, res, next) {
     } else {
       var filteredUsers = response.filter(user => user.name == req.params.user)
       if (filteredUsers.length === 0) {
-        res.json({error: "User not found"})
+        res.json({ error: "User not found" })
       } else {
         res.json({
           user_jwt: Nexmo.generateJwt(config.PRIVATE_KEY, {
@@ -132,7 +132,7 @@ router.get('/jwt/:user', function(req, res, next) {
   });
 });
 
-router.get('/', function(req, res, next) {
+router.get('/', function (req, res, next) {
   res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
