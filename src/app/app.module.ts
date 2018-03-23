@@ -47,13 +47,17 @@ import { AppRoutingModule } from './app-routing/app-routing.module';
 import { MessagingService } from './messaging.service';
 import { DataService } from './data.service';
 import { KeysPipe } from './keys.pipe';
+import { MapToIterablePipe } from './map-to-iterable.pipe';
+import { CreateConversationDialogComponent } from './create-conversation-dialog/create-conversation-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     ConversationsComponent,
-    KeysPipe
+    KeysPipe,
+    MapToIterablePipe,
+    CreateConversationDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -70,9 +74,11 @@ import { KeysPipe } from './keys.pipe';
     MatIconModule,
     MatSidenavModule,
     MatProgressSpinnerModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatDialogModule
   ],
   providers: [MessagingService, DataService],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [CreateConversationDialogComponent]
 })
 export class AppModule { }

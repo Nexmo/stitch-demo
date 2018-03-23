@@ -3,6 +3,8 @@ var path = require('path');
 var router = express.Router();
 var Nexmo = require('nexmo');
 var config = require('../config');
+var debug = require('debug')('stitch-demo:server');
+
 
 var nexmo = new Nexmo({ apiKey: config.API_KEY, apiSecret: config.API_SECRET, applicationId: config.APP_ID, privateKey: config.PRIVATE_KEY });
 
@@ -68,6 +70,7 @@ router.post('/conversations', function (req, res, next) {
 });
 
 router.put('/conversations', function (req, res, next) {
+  debug(req.body)
   var conversationId = req.body.conversationId
   var userId = req.body.userId
   var action = req.body.action
@@ -99,6 +102,16 @@ router.get('/users', function (req, res) {
 
 router.get('/conversations', function (req, res) {
   nexmo.conversations.get({}, (error, response) => {
+    if (error) {
+      res.json(error)
+    } else {
+      res.json(response)
+    }
+  });
+});
+
+router.get('/conversations/:id', function (req, res) {
+  nexmo.conversations.get(req.params.id, (error, response) => {
     if (error) {
       res.json(error)
     } else {

@@ -7,16 +7,23 @@
             <mat-icon matListIcon>forum</mat-icon>
           </ng-template>
           <mat-list class="conversations">
-            <mat-list-item *ngFor="let conversation of conversations | keys" (click)="selectConversation(conversation.value.id)">
+            <mat-list-item *ngFor="let conversation of conversations" (click)="selectConversation(conversation.id)">
               <mat-icon matListIcon>forum</mat-icon>
-              <p>{{conversation.value.display_name}}</p>
+              <p>{{conversation.display_name}}</p>
             </mat-list-item>
             <mat-list-item class="create-conversation">
-              <button mat-mini-fab (click)="createConversation()">
+              <button mat-fab (click)="createConversation()">
                 <mat-icon aria-label="Create Conversation">add</mat-icon>
               </button>
             </mat-list-item>
           </mat-list>
+          <hr>
+          <mat-list class="all-conversations">
+              <mat-list-item *ngFor="let conversation of allConversations" (click)="selectAndJoinConversation(conversation.id)">
+                <mat-icon matListIcon>forum</mat-icon>
+                <p>{{conversation.display_name}}</p>
+              </mat-list-item>
+            </mat-list>
         </mat-tab>
         <mat-tab>
           <ng-template mat-tab-label>

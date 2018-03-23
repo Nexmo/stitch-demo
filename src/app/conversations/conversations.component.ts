@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 import { MessagingService } from '../messaging.service';
 import { DataService } from '../data.service';
+import { CreateConversationDialogComponent } from '../create-conversation-dialog/create-conversation-dialog.component';
 
 @Component({
   selector: 'app-conversations',
@@ -11,37 +13,78 @@ import { DataService } from '../data.service';
 })
 export class ConversationsComponent implements OnInit {
 
-  constructor(private ms: MessagingService, private ds: DataService, private router: Router) { }
+  constructor(private ms: MessagingService, private ds: DataService, private router: Router, public dialog: MatDialog) { }
+
+  buildConversationsArray(conversations) {    
+    let array = [];
+
+    for (let conversation in conversations) {
+      array.push(conversations[conversation]);
+    }
+
+    return array
+  }
 
   ngOnInit() {
     if (!this.ds.app) {
       this.router.navigate(['/']);
     } else {
-      this.ds.app.getConversations().then(conversations => this.conversations = conversations)
+      this.ds.app.getConversations().then(conversations => {
+        this.userConversations = conversations;
+        this.conversations = this.buildConversationsArray(conversations)
+        this.allConversations = []
+        this.ms.getConversations().then(conversations => {  
+          for (let i = 0; i < conversations.length; i++) {
+            this.ms.getConversation(conversations[i].uuid).then(
+              (conversation) => {
+                if (!this.userConversations[conversation.id]) {
+                  this.allConversations.push(conversation)
+                }
+              }
+            )
+            
+          }      
+        })
+      })
       this.ms.getUsers().then(users => this.users = users)
+      
     }
   }
 
   selectConversation(conversationId: string) {
     this.ds.app.getConversation(conversationId).then(conversation => {
       this.selectedConversation = conversation
-      // this.events = []
-      // for (let event in conversation.events) {
-      //   this.events.push(conversation.events[event])
+
+      // for (let event in this.selectedConversation.events.entries()) {
+      //   this.events.push(event.next().value())
       // }
       // this.selectedConversation.on("text", (sender, message) => {
-      //   this.events.push(message)
+      //   console.log(document.querySelector(".conversation-history"));
+
+      //   document.querySelector(".conversation-history").scrollTop = document.querySelector(".conversation-history").scrollHeight + 150;
       // })
       console.log("Selected Conversation", this.selectedConversation)
     }
     )
   }
 
-  createConversation(displayName: string) {
-    this.ms.createConversation(displayName)
+  createConversation(): void {
+    let dialogRef = this.dialog.open(CreateConversationDialogComponent, {
+      width: '300px',
+      data: this.ds.app.me
+    });
+
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log("dialog closed")
+      this.ds.app.getConversations().then((conversations) => {
+        this.conversations = this.buildConversationsArray(conversations)
+      })
+    });
   }
 
-  sendText(text:string) {
+
+  sendText(text: string) {
     this.selectedConversation.sendText(text);
     this.text = "";
   }
@@ -72,6 +115,8 @@ export class ConversationsComponent implements OnInit {
   }
 
   conversations: any
+  allConversations: any
+  userConversations: any
   users: any
   selectedConversation: any
   text: string

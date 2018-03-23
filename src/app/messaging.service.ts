@@ -9,7 +9,7 @@ export class MessagingService {
 
 
   constructor(private http: HttpClient) {
-    
+
   }
 
   initialize() {
@@ -22,20 +22,32 @@ export class MessagingService {
 
   public client: any
 
-  public getUserJwt(username: string):Promise<any> {
+  public getUserJwt(username: string): Promise<any> {
     return this.http.get(GATEWAY_URL + "jwt/" + username + "?admin=true").toPromise().then((response: any) => response.user_jwt)
   }
 
-  public createUser(username: string):Promise<any> {
-    return this.http.post(GATEWAY_URL + "users/", {username: username, admin: true}).toPromise().then((response: any) => response.user_jwt)
+  public createUser(username: string): Promise<any> {
+    return this.http.post(GATEWAY_URL + "users/", { username: username, admin: true }).toPromise().then((response: any) => response.user_jwt)
   }
 
-  public createConversation(displayName: string):Promise<any> {
-    return this.http.post(GATEWAY_URL + "conversations/", {displayName: displayName}).toPromise().then(console.log)
+  public createConversation(displayName: string): Promise<any> {
+    return this.http.post(GATEWAY_URL + "conversations/", { displayName: displayName }).toPromise()
   }
 
-  public getUsers():Promise<any> {
+  public joinConversation(conversationId: string, userId: string) {
+    return this.http.put(GATEWAY_URL + "conversations/", { conversationId: conversationId, userId: userId, action: "join" })
+  }
+
+  public getUsers(): Promise<any> {
     return this.http.get(GATEWAY_URL + "users/").toPromise()
+  }
+
+  public getConversations(): Promise<any> {
+    return this.http.get(GATEWAY_URL + "conversations/").toPromise().then((response: any) => response._embedded.conversations)
+  }
+
+  public getConversation(conversationId): Promise<any> {
+    return this.http.get(GATEWAY_URL + "conversations/" + conversationId).toPromise()
   }
 
 }

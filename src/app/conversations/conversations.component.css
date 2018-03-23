@@ -90,3 +90,7 @@ section .mat-list .mat-list-avatar{
 .full-width .mat-icon {
     cursor: pointer;
 }
+
+.all-conversations {
+    opacity: 0.7;
+}

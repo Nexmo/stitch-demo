@@ -1,0 +1,10 @@
+<h2 mat-dialog-title>Create Conversation</h2>
+<mat-dialog-content>
+    <form (ngSubmit)="onCreateConversation()">
+        <mat-form-field class="full-width">
+          <input matInput placeholder="Display Name" name="display_name" [(ngModel)]="display_name">
+        </mat-form-field>
+        <br>
+        <button type="submit" mat-raised-button color="primary" (click)="showSpinner = !showSpinner">Create Conversation <mat-spinner color="accent" mode="indeterminate" *ngIf="showSpinner"></mat-spinner></button>
+      </form>
+</mat-dialog-content>
