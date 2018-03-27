@@ -5,6 +5,9 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { MessagingService } from '../messaging.service';
 import { DataService } from '../data.service';
 import { CreateConversationDialogComponent } from '../create-conversation-dialog/create-conversation-dialog.component';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/from';
+import 'rxjs/add/operator/map';
 
 @Component({
   selector: 'app-conversations',
@@ -15,7 +18,7 @@ export class ConversationsComponent implements OnInit {
 
   constructor(private ms: MessagingService, private ds: DataService, private router: Router, public dialog: MatDialog) { }
 
-  buildConversationsArray(conversations) {    
+  buildConversationsArray(conversations) {
     let array = [];
 
     for (let conversation in conversations) {
@@ -33,21 +36,21 @@ export class ConversationsComponent implements OnInit {
         this.userConversations = conversations;
         this.conversations = this.buildConversationsArray(conversations)
         this.allConversations = []
-        this.ms.getConversations().then(conversations => {  
+        this.ms.getConversations().then(conversations => {
           for (let i = 0; i < conversations.length; i++) {
             this.ms.getConversation(conversations[i].uuid).then(
               (conversation) => {
-                if (!this.userConversations[conversation.id]) {
+                if (!this.userConversations[conversation.uuid]) {
                   this.allConversations.push(conversation)
                 }
               }
             )
-            
-          }      
+
+          }
         })
       })
       this.ms.getUsers().then(users => this.users = users)
-      
+
     }
   }
 
@@ -55,14 +58,16 @@ export class ConversationsComponent implements OnInit {
     this.ds.app.getConversation(conversationId).then(conversation => {
       this.selectedConversation = conversation
 
-      // for (let event in this.selectedConversation.events.entries()) {
-      //   this.events.push(event.next().value())
-      // }
-      // this.selectedConversation.on("text", (sender, message) => {
-      //   console.log(document.querySelector(".conversation-history"));
+      Observable.from(conversation.events.values()).subscribe(
+        event => {
+          this.events.push(event)
+        }
+      )
 
-      //   document.querySelector(".conversation-history").scrollTop = document.querySelector(".conversation-history").scrollHeight + 150;
-      // })
+      this.selectedConversation.on("text", (sender, message) => {
+        this.events.push(message)
+
+      })
       console.log("Selected Conversation", this.selectedConversation)
     }
     )
@@ -85,8 +90,7 @@ export class ConversationsComponent implements OnInit {
 
 
   sendText(text: string) {
-    this.selectedConversation.sendText(text);
-    this.text = "";
+    this.selectedConversation.sendText(text).then(() => this.text = "")
   }
 
   private nameToImage(name) {

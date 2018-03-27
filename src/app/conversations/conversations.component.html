@@ -6,24 +6,22 @@
           <ng-template mat-tab-label>
             <mat-icon matListIcon>forum</mat-icon>
           </ng-template>
+          <button mat-fab class="create-conversation" (click)="createConversation()">
+            <mat-icon aria-label="Create Conversation">add</mat-icon>
+          </button>
           <mat-list class="conversations">
             <mat-list-item *ngFor="let conversation of conversations" (click)="selectConversation(conversation.id)">
               <mat-icon matListIcon>forum</mat-icon>
               <p>{{conversation.display_name}}</p>
             </mat-list-item>
-            <mat-list-item class="create-conversation">
-              <button mat-fab (click)="createConversation()">
-                <mat-icon aria-label="Create Conversation">add</mat-icon>
-              </button>
+          </mat-list>
+          <hr class="divider">
+          <mat-list class="all-conversations">
+            <mat-list-item *ngFor="let conversation of allConversations" (click)="selectAndJoinConversation(conversation.id)">
+              <mat-icon matListIcon>forum</mat-icon>
+              <p>{{conversation.display_name}}</p>
             </mat-list-item>
           </mat-list>
-          <hr>
-          <mat-list class="all-conversations">
-              <mat-list-item *ngFor="let conversation of allConversations" (click)="selectAndJoinConversation(conversation.id)">
-                <mat-icon matListIcon>forum</mat-icon>
-                <p>{{conversation.display_name}}</p>
-              </mat-list-item>
-            </mat-list>
         </mat-tab>
         <mat-tab>
           <ng-template mat-tab-label>
@@ -65,7 +63,7 @@
 
     <mat-divider></mat-divider>
     <mat-list dense class="conversation-history mat-typography">
-      <mat-list-item *ngFor="let event of selectedConversation.events.values()" [dir]="event.from === selectedConversation.me.id ? 'rtl' : 'ltr'">
+      <mat-list-item *ngFor="let event of events" [dir]="event.from === selectedConversation.me.id ? 'rtl' : 'ltr'">
         <img *ngIf="event.type == 'text'" matListAvatar matTooltip="{{selectedConversation.members[event.from].user.name}}" src="https://randomuser.me/api/portraits/thumb/{{nameToImage(event.from).prefix}}men/{{nameToImage(event.from).index}}.jpg"
         />
         <p *ngIf="event.type == 'text'" [dir]="'ltr'">{{event.body.text}}</p>
