@@ -10,23 +10,29 @@ var nexmo = new Nexmo({ apiKey: config.API_KEY, apiSecret: config.API_SECRET, ap
 
 const adminAcl = {
   "paths": {
-    "/v1/sessions/**": {},
     "/v1/users/**": {},
-    "/v1/conversations/**": {}
+    "/v1/conversations/**": {},
+    "/v1/sessions/**": {},
+    "/v1/devices/**": {},
+    "/v1/image/**": {},
+    "/v3/media/**": {},
+    "/v1/applications/**": {},
+    "/v1/push/**": {},
+    "/v1/knocking/**": {}
   }
 }
 
 const nonAdminAcl = {
   "paths": {
-    "/v1/sessions/**": {
-      "methods": ["GET"]
-    },
-    "/v1/users/*": {
-      "methods": ["GET"]
-    },
-    "/v1/conversations/*": {
-      "methods": ["GET", "POST", "PUT"]
-    }
+    "/v1/users/**": {},
+    "/v1/conversations/**": {},
+    "/v1/sessions/**": {},
+    "/v1/devices/**": {},
+    "/v1/image/**": {},
+    "/v3/media/**": {},
+    "/v1/applications/**": {},
+    "/v1/push/**": {},
+    "/v1/knocking/**": {}
   }
 }
 
