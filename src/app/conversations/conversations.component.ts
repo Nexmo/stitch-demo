@@ -73,6 +73,26 @@ export class ConversationsComponent implements OnInit {
     )
   }
 
+  selectAndJoinConversation(conversationId: string) {
+    this.ds.app.getConversation(conversationId).then(conversation => {
+      this.selectedConversation = conversation
+      this.selectedConversation.join()
+
+      Observable.from(conversation.events.values()).subscribe(
+        event => {
+          this.events.push(event)
+        }
+      )
+
+      this.selectedConversation.on("text", (sender, message) => {
+        this.events.push(message)
+
+      })
+      console.log("Selected Conversation", this.selectedConversation)
+    }
+    )
+  }
+
   createConversation(): void {
     let dialogRef = this.dialog.open(CreateConversationDialogComponent, {
       width: '300px',

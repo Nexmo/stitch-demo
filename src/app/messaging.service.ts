@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 declare var ConversationClient: any;
-const GATEWAY_URL = "http://localhost:3000/api/";
+const GATEWAY_URL = "http://nexmo-in-app-demo.herokuapp.com/api/";
 
 @Injectable()
 export class MessagingService {

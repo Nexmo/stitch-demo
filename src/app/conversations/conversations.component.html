@@ -17,7 +17,7 @@
           </mat-list>
           <hr class="divider">
           <mat-list class="all-conversations">
-            <mat-list-item *ngFor="let conversation of allConversations" (click)="selectAndJoinConversation(conversation.id)">
+            <mat-list-item *ngFor="let conversation of allConversations" (click)="selectAndJoinConversation(conversation.uuid)">
               <mat-icon matListIcon>forum</mat-icon>
               <p>{{conversation.display_name}}</p>
             </mat-list-item>
