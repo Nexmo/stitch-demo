@@ -81,3 +81,7 @@ curl --request PUT \
 ## What's Next
 
 Use the [Android Messaging Demo app](https://github.com/Nexmo/messaging-demo-android) to try out Nexmo Stitch across web and Android platforms.
+
+## License 
+
+Licenced under [MIT](LICENSE)
