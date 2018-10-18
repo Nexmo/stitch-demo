@@ -46,35 +46,35 @@ $ nexmo app:create "My Stitch Application" http://example.com http://example.com
 ## Start chatting!
 
 1. Create a user or two
-```sh
-curl --request POST \
-  --url http://localhost:3000/api/users \
-  --header 'content-type: application/json' \
-  --data '{
-	"username": "user2",
-	"admin": true
-}'
-```
+   ```sh
+   curl --request POST \
+     --url http://localhost:3000/api/users \
+     --header 'content-type: application/json' \
+     --data '{
+	   "username": "user2",
+	   "admin": true
+     }'
+   ```
 
 2. Create a conversation via the demo API
-```sh
-curl --request POST \
-  --url http://localhost:3000/api/conversations \
-  --header 'content-type: application/json' \
-  --data '{"displayName": "My Chat"}'
-```
+   ```sh
+   curl --request POST \
+     --url http://localhost:3000/api/conversations \
+     --header 'content-type: application/json' \
+     --data '{"displayName": "My Chat"}'
+   ```
 
 3. Join the user to the conversation. Remember to replace the `conversationId` and `userId` with IDs from the two previous steps.
-```sh
-curl --request PUT \
-  --url http://localhost:3000/api/conversations \
-  --header 'content-type: application/json' \
-  --data '{
-	"conversationId": "CON-7cda3a42-8f7f-44c6-a4ba-aa23be506397",
-	"userId": "USR-ca160eee-836a-4ec7-8ac4-317aefe8d5d3",
-	"action": "join"
-}'
-```
+   ```sh
+   curl --request PUT \
+     --url http://localhost:3000/api/conversations \
+     --header 'content-type: application/json' \
+     --data '{
+	   "conversationId": "CON-7cda3a42-8f7f-44c6-a4ba-aa23be506397",
+	   "userId": "USR-ca160eee-836a-4ec7-8ac4-317aefe8d5d3",
+	   "action": "join"
+     }'
+   ```
 
 4. Verify the app is running by visiting `localhost:3000/` and login with the username you created in step 1.
 
