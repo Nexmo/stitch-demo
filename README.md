@@ -36,7 +36,7 @@ $ nexmo app:create "My Stitch Application" http://example.com http://example.com
 ## Running the demo
 
 1. Clone or download this repo
-1. Create a .env file using the env.example template
+1. Create a `.env` file using the `example.env` template (The file name has to be `.env`, it is not just the filename extension)
 1. Input your API Key, API Secret, and application ID
 1. Ensure the `private.key` file from the "Create an Application" is in your current working directory (See `private.key.example`)
 1. Install the node modules `$ npm install`
