@@ -4,6 +4,7 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
+    "debug": "DEBUG=stitch-demo:* node ./bin/www",
     "start": "ng build && DEBUG=stitch-demo:* node ./bin/www",
     "build": "ng build --prod",
     "test": "ng test",
